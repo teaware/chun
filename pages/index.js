@@ -1,65 +1,96 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import * as THREE from "three";
+import { useEffect } from "react";
+import { Canvas } from "react-three-fiber";
+import { useSprings, a } from "@react-spring/three";
+
+const number = 24;
+const colors = [
+  "#A2CCB6",
+  "#FCEEB5",
+  "#EE786E",
+  "#e0feff",
+  "lightpink",
+  "lightblue",
+];
+const random = (i) => {
+  const r = Math.random();
+  return {
+    position: [100 - Math.random() * 200, 100 - Math.random() * 200, i * 1.5],
+    color: colors[Math.round(Math.random() * (colors.length - 1))],
+    scale: [1 + r * 14, 1 + r * 14, 1],
+    rotation: [0, 0, THREE.Math.degToRad(Math.round(Math.random()) * 45)],
+  };
+};
+
+const data = new Array(number).fill().map(() => {
+  return {
+    color: colors[Math.round(Math.random() * (colors.length - 1))],
+    args: [0.1 + Math.random() * 9, 0.1 + Math.random() * 9, 10],
+  };
+});
+
+function Content() {
+  const [springs, set] = useSprings(number, (i) => ({
+    from: random(i),
+    ...random(i),
+    config: { mass: 20, tension: 150, friction: 50 },
+  }));
+  useEffect(
+    () =>
+      void setInterval(
+        () => set((i) => ({ ...random(i), delay: i * 40 })),
+        3000
+      ),
+    []
+  );
+  return data.map((d, index) => (
+    <a.mesh key={index} {...springs[index]} castShadow receiveShadow>
+      <boxBufferGeometry attach="geometry" args={d.args} />
+      <a.meshStandardMaterial
+        attach="material"
+        color={springs[index].color}
+        roughness={0.75}
+        metalness={0.5}
+      />
+    </a.mesh>
+  ));
+}
+
+function Lights() {
+  return (
+    <group>
+      <pointLight intensity={0.3} />
+      <ambientLight intensity={2} />
+      <spotLight
+        castShadow
+        intensity={0.2}
+        angle={Math.PI / 7}
+        position={[150, 150, 250]}
+        penumbra={1}
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+      />
+    </group>
+  );
+}
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>新年快乐</title>
       </Head>
+      <div className="w-full h-screen">
+        <Canvas shadowMap camera={{ position: [0, 0, 100], fov: 100 }}>
+          <Lights />
+          <Content />
+        </Canvas>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+        <h1 className="absolute top-1/2 transform -translate-y-1/2 text-7xl xl:text-9xl vertical-rl left-4 xl:left-24">
+          新年快乐
         </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+      </div>
+    </>
+  );
 }
