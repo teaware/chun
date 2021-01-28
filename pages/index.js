@@ -1,81 +1,74 @@
 import Head from "next/head";
 import * as THREE from "three";
-import { useEffect } from "react";
-import { Canvas } from "react-three-fiber";
-import { useSprings, a } from "@react-spring/three";
+import { Suspense, useState, useMemo, useRef } from "react";
+import { Canvas, useFrame, useThree } from "react-three-fiber";
+import Sparks from "../components/sparks";
 
-const number = 24;
-const colors = [
-  "#A2CCB6",
-  "#FCEEB5",
-  "#EE786E",
-  "#e0feff",
-  "lightpink",
-  "lightblue",
-];
-const random = (i) => {
-  const r = Math.random();
-  return {
-    position: [100 - Math.random() * 200, 100 - Math.random() * 200, i * 1.5],
-    color: colors[Math.round(Math.random() * (colors.length - 1))],
-    scale: [1 + r * 14, 1 + r * 14, 1],
-    rotation: [0, 0, THREE.Math.degToRad(Math.round(Math.random()) * 45)],
-  };
-};
-
-const data = new Array(number).fill().map(() => {
-  return {
-    color: colors[Math.round(Math.random() * (colors.length - 1))],
-    args: [0.1 + Math.random() * 9, 0.1 + Math.random() * 9, 10],
-  };
-});
-
-function Content() {
-  const [springs, set] = useSprings(number, (i) => ({
-    from: random(i),
-    ...random(i),
-    config: { mass: 20, tension: 150, friction: 50 },
-  }));
-  useEffect(
-    () =>
-      void setInterval(
-        () => set((i) => ({ ...random(i), delay: i * 40 })),
-        3000
-      ),
-    []
-  );
-  return data.map((d, index) => (
-    <a.mesh key={index} {...springs[index]} castShadow receiveShadow>
-      <boxBufferGeometry attach="geometry" args={d.args} />
-      <a.meshStandardMaterial
-        attach="material"
-        color={springs[index].color}
-        roughness={0.75}
-        metalness={0.5}
-      />
-    </a.mesh>
-  ));
-}
-
-function Lights() {
+function Ellipse(props) {
+  const geometry = useMemo(() => {
+    const curve = new THREE.EllipseCurve(0, 0, 10, 3, 0, 2 * Math.PI, false, 0);
+    const points = curve.getPoints(50);
+    return new THREE.BufferGeometry().setFromPoints(points);
+  }, []);
   return (
-    <group>
-      <pointLight intensity={0.3} />
-      <ambientLight intensity={2} />
-      <spotLight
-        castShadow
-        intensity={0.2}
-        angle={Math.PI / 7}
-        position={[150, 150, 250]}
-        penumbra={1}
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-      />
-    </group>
+    <line geometry={geometry} {...props}>
+      <meshBasicMaterial attach="material" />
+    </line>
   );
 }
+
+// function ReactAtom(props) {
+//   return (
+//     <group {...props}>
+//       <Ellipse />
+//       <Ellipse rotation={[0, 0, Math.PI / 3]} />
+//       <Ellipse rotation={[0, 0, -Math.PI / 3]} />
+//       <mesh>
+//         <sphereBufferGeometry attach="geometry" args={[0.5, 32, 32]} />
+//         <meshBasicMaterial attach="material" color="red" />
+//       </mesh>
+//     </group>
+//   );
+// }
+
+// function Number({ mouse, hover }) {
+//   const ref = useRef();
+//   const { size, viewport } = useThree();
+//   const aspect = size.width / viewport.width;
+//   useFrame((state) => {
+//     if (ref.current) {
+//       ref.current.position.x = lerp(
+//         ref.current.position.x,
+//         mouse.current[0] / aspect / 10,
+//         0.1
+//       );
+//       ref.current.rotation.x = lerp(
+//         ref.current.rotation.x,
+//         0 + mouse.current[1] / aspect / 50,
+//         0.1
+//       );
+//       ref.current.rotation.y = 0.8;
+//     }
+//   });
+//   return (
+//     <Suspense fallback={null}>
+//       <group ref={ref}>
+//         <Text
+//           size={10}
+//           onPointerOver={() => hover(true)}
+//           onPointerOut={() => hover(false)}
+//         >
+//           4
+//         </Text>
+//         <ReactAtom position={[35, -20, 0]} scale={[1, 0.5, 1]} />
+//       </group>
+//     </Suspense>
+//   );
+// }
 
 export default function Home() {
+  const [hovered, hover] = useState(false);
+  const mouse = useRef([0, 0]);
   return (
     <>
       <Head>
@@ -83,8 +76,19 @@ export default function Home() {
       </Head>
       <div className="w-full h-screen">
         <Canvas shadowMap camera={{ position: [0, 0, 100], fov: 100 }}>
-          <Lights />
-          <Content />
+          <Sparks
+            count={20}
+            mouse={mouse}
+            colors={[
+              "#A2CCB6",
+              "#FCEEB5",
+              "#EE786E",
+              "#e0feff",
+              "lightpink",
+              "lightblue",
+            ]}
+          />
+          {/* <Number mouse={mouse} hover={hover} /> */}
         </Canvas>
 
         <h1 className="absolute top-1/2 transform -translate-y-1/2 text-7xl xl:text-9xl vertical-rl left-4 xl:left-24">
