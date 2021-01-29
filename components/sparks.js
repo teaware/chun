@@ -68,19 +68,19 @@ export default function Sparks({ mouse, count, colors, radius = 10 }) {
       ref.current.rotation.x = lerp(
         ref.current.rotation.x,
         0 + mouse.current[1] / aspect / 200,
-        0.2
+        0.1
       );
       ref.current.rotation.y = lerp(
         ref.current.rotation.y,
         0 + mouse.current[0] / aspect / 400,
-        0.2
+        0.1
       );
     }
   });
 
   return (
     <group ref={ref}>
-      <group position={[-radius * 2, -radius, -10]} scale={[2, 2.6, 2]}>
+      <group position={[-radius * 2, -radius, -10]} scale={[1, 1.3, 1]}>
         {lines.map((props, index) => (
           <Fatline key={index} {...props} />
         ))}
