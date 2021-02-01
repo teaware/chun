@@ -94,7 +94,7 @@ export default function Page() {
           }
         >
           <Lines
-            count={50}
+            count={80}
             colors={[
               "#A2CCB6",
               "#FCEEB5",
@@ -107,7 +107,7 @@ export default function Page() {
           <Rig mouse={mouse} />
         </Canvas>
 
-        <h1 className="absolute top-1/2 transform -translate-y-1/2 text-7xl xl:text-9xl vertical-rl left-4 xl:left-24">
+        <h1 className="absolute top-1/2 transform -translate-y-1/2 text-7xl xl:text-9xl vertical-rl left-8 xl:left-24">
           迎春接福
         </h1>
       </div>
