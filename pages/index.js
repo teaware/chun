@@ -1,96 +1,94 @@
 import Head from "next/head";
-import React, {
-  Suspense,
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-} from "react";
-import { Canvas, useFrame, useThree } from "react-three-fiber";
-import lerp from "lerp";
-import Text from "../components/text";
-import Sparks from "../components/sparks";
+import * as THREE from "three";
+import { useEffect } from "react";
+import { Canvas } from "react-three-fiber";
+import { useSprings, animated } from "@react-spring/three";
 
-function Number({ mouse, hover }) {
-  const ref = useRef();
-  const { size, viewport } = useThree();
-  const aspect = size.width / viewport.width;
-  useFrame(() => {
-    if (ref.current) {
-      ref.current.position.x = lerp(
-        ref.current.position.x,
-        mouse.current[0] / aspect / 10,
-        0.1
-      );
-      ref.current.rotation.x = lerp(
-        ref.current.rotation.x,
-        0 + mouse.current[1] / aspect / 50,
-        0.1
-      );
-      ref.current.rotation.y = 0.6;
-    }
-  });
+const number = 24;
+const colors = [
+  "#A2CCB6",
+  "#FCEEB5",
+  "#EE786E",
+  "#e0feff",
+  "lightpink",
+  "lightblue",
+];
+const styles = (i) => {
+  const r = Math.random();
+  return {
+    position: [100 - Math.random() * 200, 100 - Math.random() * 200, i * 1.5],
+    color: colors[Math.round(Math.random() * (colors.length - 1))],
+    scale: [1 + r * 14, 1 + r * 14, 1],
+    rotation: [0, 0, THREE.Math.degToRad(Math.round(Math.random()) * 45)],
+  };
+};
+
+const data = new Array(number).fill().map(() => {
+  return {
+    color: colors[Math.round(Math.random() * (colors.length - 1))],
+    args: [0.1 + Math.random() * 9, 0.1 + Math.random() * 9, 10],
+  };
+});
+
+function Content() {
+  const [springs, set] = useSprings(number, (i) => ({
+    from: styles(i),
+    ...styles(i),
+    config: { mass: 20, tension: 150, friction: 50 },
+  }));
+  useEffect(
+    () =>
+      void setInterval(
+        () => set((i) => ({ ...styles(i), delay: i * 40 })),
+        3000
+      ),
+    []
+  );
+  return data.map((d, index) => (
+    <animated.mesh key={index} {...springs[index]} castShadow receiveShadow>
+      <boxBufferGeometry attach="geometry" args={d.args} />
+      <animated.meshStandardMaterial
+        attach="material"
+        color={springs[index].color}
+        roughness={0.75}
+        metalness={0.5}
+      />
+    </animated.mesh>
+  ));
+}
+
+function Lights() {
   return (
-    <Suspense fallback={null}>
-      <group ref={ref}>
-        <Text
-          size={10}
-          // onPointerOver={() => hover(true)}
-          // onPointerOut={() => hover(false)}
-        >
-          4
-        </Text>
-      </group>
-    </Suspense>
+    <group>
+      <pointLight intensity={0.3} />
+      <ambientLight intensity={2} />
+      <spotLight
+        castShadow
+        intensity={0.2}
+        angle={Math.PI / 7}
+        position={[150, 150, 250]}
+        penumbra={1}
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+      />
+    </group>
   );
 }
 
-export default function Home() {
-  const [hovered, hover] = useState(false);
-  const [down, set] = useState(false);
-  const mouse = useRef([0, 0]);
-  const onMouseMove = useCallback(
-    ({ clientX: x, clientY: y }) =>
-      (mouse.current = [x - window.innerWidth / 2, y - window.innerHeight / 2]),
-    []
-  );
-
-  useEffect(() => {
-    document.body.style.cursor = hovered
-      ? "pointer"
-      : "url('https://raw.githubusercontent.com/chenglou/react-motion/master/demos/demo8-draggable-list/cursor.png') 39 39, auto";
-  }, [hovered]);
+export default function Box() {
   return (
     <>
       <Head>
-        <title>四季如春</title>
+        <title>新年快乐</title>
       </Head>
       <div className="w-full h-screen">
-        <Canvas
-          camera={{ fov: 100, position: [0, 0, 30] }}
-          onMouseMove={onMouseMove}
-          onMouseUp={() => set(false)}
-          onMouseDown={() => set(true)}
-        >
-          <fog attach="fog" args={["white", 50, 190]} />
-          <pointLight distance={100} intensity={4} color="white" />
-          <Number mouse={mouse} hover={hover} />
-          <Sparks
-            count={20}
-            mouse={mouse}
-            colors={[
-              "#A2CCB6",
-              "#FCEEB5",
-              "#EE786E",
-              "#e0feff",
-              "lightpink",
-              "lightblue",
-            ]}
-          />
+        <Canvas shadowMap camera={{ position: [0, 0, 100], fov: 100 }}>
+          <Lights />
+          <Content />
         </Canvas>
 
         <h1 className="absolute top-1/2 transform -translate-y-1/2 text-7xl xl:text-9xl vertical-rl left-4 xl:left-24">
-          四季如春
+          新年快乐
         </h1>
       </div>
     </>
