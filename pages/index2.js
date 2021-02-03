@@ -1,6 +1,6 @@
 import Head from "next/head";
 import * as THREE from "three";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useEffect } from "react";
 import { extend, Canvas, useFrame, useThree } from "react-three-fiber";
 import * as meshline from "threejs-meshline";
 
@@ -8,6 +8,8 @@ extend(meshline);
 
 function Fatline({ curve, width, color, speed, ratio }) {
   const material = useRef();
+  const { gl } = useThree();
+  useEffect(() => void gl.setPixelRatio(window.devicePixelRatio || 2), []);
   useFrame(() => (material.current.uniforms.dashOffset.value -= speed));
   return (
     <mesh>
@@ -83,6 +85,7 @@ export default function Page() {
       <Head>
         <title>迎春接福</title>
       </Head>
+
       <div className="w-full h-screen">
         <Canvas
           camera={{ position: [0, 0, 10], fov: 45 }}
@@ -106,7 +109,6 @@ export default function Page() {
           />
           <Rig mouse={mouse} />
         </Canvas>
-
         <h1 className="absolute top-1/2 transform -translate-y-1/2 text-7xl xl:text-9xl vertical-rl left-8 xl:left-24">
           迎春接福
         </h1>

@@ -1,8 +1,8 @@
 import Head from "next/head";
 import * as THREE from "three";
 import { useEffect } from "react";
-import { Canvas } from "react-three-fiber";
-import { useSprings, animated } from "@react-spring/three";
+import { Canvas, useThree } from "react-three-fiber";
+import { useSprings, a } from "react-spring/three";
 
 const number = 24;
 const colors = [
@@ -31,6 +31,9 @@ const data = new Array(number).fill().map(() => {
 });
 
 function Content() {
+  const { gl } = useThree();
+  useEffect(() => void gl.setPixelRatio(window.devicePixelRatio || 2), []);
+
   const [springs, set] = useSprings(number, (i) => ({
     from: styles(i),
     ...styles(i),
@@ -45,15 +48,15 @@ function Content() {
     []
   );
   return data.map((d, index) => (
-    <animated.mesh key={index} {...springs[index]} castShadow receiveShadow>
+    <a.mesh key={index} {...springs[index]} castShadow receiveShadow>
       <boxBufferGeometry attach="geometry" args={d.args} />
-      <animated.meshStandardMaterial
+      <a.meshStandardMaterial
         attach="material"
         color={springs[index].color}
         roughness={0.75}
         metalness={0.5}
       />
-    </animated.mesh>
+    </a.mesh>
   ));
 }
 
@@ -81,12 +84,12 @@ export default function Box() {
       <Head>
         <title>新年快乐</title>
       </Head>
+
       <div className="w-full h-screen">
         <Canvas shadowMap camera={{ position: [0, 0, 100], fov: 100 }}>
           <Lights />
           <Content />
         </Canvas>
-
         <h1 className="absolute top-1/2 transform -translate-y-1/2 text-7xl xl:text-9xl vertical-rl left-4 xl:left-24">
           新年快乐
         </h1>
