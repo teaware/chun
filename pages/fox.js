@@ -177,10 +177,8 @@ export default function Fox() {
         <title>春</title>
       </Head>
 
-      <h1 className="absolute top-32 left-1/2 transform -translate-x-1/2 tracking-tighter leading-none text-center text-lime-500 text-5xl lg:text-9xl font-extrabold">
-        春天
-        <br />
-        来了
+      <h1 className="absolute top-32 left-1/2 transform -translate-x-1/2 tracking-tighter leading-none text-center text-lime-500 text-6xl lg:text-9xl font-extrabold">
+        春
       </h1>
       <div className="w-full h-screen">
         <Canvas shadowMap camera={{ position: [0, 0, 16] }}>
