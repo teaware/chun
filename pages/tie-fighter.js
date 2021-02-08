@@ -5,7 +5,8 @@ import { Canvas, useThree } from "react-three-fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import { useTransition, a } from "react-spring";
 
-const url = "/scene.gltf";
+// npx gltfjsx public/scene.gltf
+const url = "/scenes/tie/scene.gltf";
 
 function Model(props) {
   const group = useRef();

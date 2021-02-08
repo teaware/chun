@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import * as THREE from "three";
 import { useEffect } from "react";
 import { Canvas, useThree } from "react-three-fiber";
@@ -93,6 +94,25 @@ export default function Box() {
         <h1 className="absolute top-1/2 transform -translate-y-1/2 text-7xl xl:text-9xl vertical-rl left-4 xl:left-24">
           新年快乐
         </h1>
+        <Link href="/fox">
+          <a className="absolute right-4 bottom-4 h-6 leading-none">
+            next
+            <svg
+              className="w-6 h-6 inline-block ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </a>
+        </Link>
       </div>
     </>
   );
