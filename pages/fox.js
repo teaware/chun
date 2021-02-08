@@ -240,7 +240,7 @@ export default function Fox() {
             </svg>
           </a>
         </Link>
-        <Loading />
+        {/* <Loading /> */}
       </div>
     </>
   );
