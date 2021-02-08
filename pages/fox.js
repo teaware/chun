@@ -174,7 +174,7 @@ export default function Fox() {
   return (
     <>
       <Head>
-        <title>迎春接福</title>
+        <title>春</title>
       </Head>
 
       <h1 className="absolute top-32 left-1/2 transform -translate-x-1/2 tracking-tighter leading-none text-center text-lime-500 text-5xl lg:text-9xl font-extrabold">
