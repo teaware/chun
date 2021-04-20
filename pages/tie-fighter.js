@@ -130,10 +130,9 @@ export default function TieFighter() {
         <title>帝国钛战机</title>
       </Head>
 
-      <h1 className="absolute top-32 left-1/2 transform -translate-x-1/2 tracking-tighter leading-none text-center text-lime-500 text-5xl lg:text-9xl font-extrabold">
+      <h1 className="absolute top-32 left-1/2 transform -translate-x-1/2 tracking-tighter leading-none text-center text-5xl lg:text-9xl font-extrabold">
         帝国
-        <br />
-        钛战机
+        <span className="block text-blue-200 dark:text-gray-600">钛战机</span>
       </h1>
       <div className="w-full h-screen">
         <Canvas shadowMap camera={{ position: [0, 0, 25] }}>

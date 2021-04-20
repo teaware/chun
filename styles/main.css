@@ -5,3 +5,10 @@
 body {
   -webkit-tap-highlight-color: transparent;
 }
+
+h1 span {
+  text-shadow: 4px 4px 0 #1f2937;
+}
+.dark h1 span {
+  text-shadow: 4px 4px 0 #fff;
+}
