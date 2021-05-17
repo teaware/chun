@@ -83,7 +83,7 @@ export default function Box() {
   return (
     <>
       <Head>
-        <title>3Dya</title>
+        <title>3D 盒子</title>
       </Head>
 
       <div className="w-full h-screen">
@@ -91,7 +91,7 @@ export default function Box() {
           <Lights />
           <Content />
         </Canvas>
-        <Link href="/fox">
+        <Link href="/">
           <a className="absolute right-4 bottom-4 h-6 leading-none">
             next
             <svg
