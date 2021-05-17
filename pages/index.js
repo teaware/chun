@@ -111,7 +111,7 @@ export default function Page() {
           <Rig mouse={mouse} />
         </Canvas>
         <h1 className="absolute top-1/2 transform -translate-y-1/2 text-7xl xl:text-9xl vertical-rl left-8 xl:left-24">
-          線條
+          線
         </h1>
         <Link href="/fox">
           <a className="absolute right-4 bottom-4 h-6 leading-none">
