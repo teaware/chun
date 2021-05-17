@@ -219,7 +219,7 @@ export default function Fox() {
             ]}
           />
         </Canvas>
-        <Link href="/tie-fighter">
+        <Link href="/boxes">
           <a className="absolute right-4 bottom-4 h-6 leading-none">
             next
             <svg
