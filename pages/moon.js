@@ -27,7 +27,7 @@ function Model(props) {
       <group>
         <group
           rotation={[-Math.PI / 2, 0, 0]}
-          position={[-10, 1, 5]}
+          position={[-10, 5, 5]}
           scale={[6, 6, 6]}
         >
           <mesh
@@ -87,21 +87,25 @@ function Zoom() {
   });
 }
 
-// function Rig({ children }) {
-//   const outer = useRef<THREE.Group>(null!);
-//   const inner = useRef<THREE.Group>(null!);
-//   useFrame(({ camera, clock }) => {
-//     outer.current.position.y = THREE.MathUtils.lerp(outer.current.position.y, 0, 0.05)
-//     inner.current.rotation.y = Math.sin(clock.getElapsedTime() / 8) * Math.PI
-//     inner.current.position.z = 5 + -Math.sin(clock.getElapsedTime() / 2) * 10
-//     inner.current.position.y = -5 + Math.sin(clock.getElapsedTime() / 2) * 2
-//   })
-//   return (
-//     <group position={[0, -100, 0]} ref={outer}>
-//       <group ref={inner}>{children}</group>
-//     </group>
-//   )
-// }
+function Rig({ children }) {
+  const outer = useRef();
+  // const inner = useRef<THREE.Group>
+  useFrame(({ camera, clock }) => {
+    // outer.current.position.y = THREE.MathUtils.lerp(
+    //   outer.current.position.y,
+    //   0,
+    //   0.05
+    // );
+    outer.current.rotation.y = Math.sin(clock.getElapsedTime() / 8) * Math.PI;
+    outer.current.position.z = 5 + -Math.sin(clock.getElapsedTime() / 2) * 5;
+    outer.current.position.y = -5 + Math.sin(clock.getElapsedTime() / 2) * 2;
+  });
+  return (
+    <group position={[0, -100, 0]} ref={outer}>
+      <group>{children}</group>
+    </group>
+  );
+}
 
 export default function Moon() {
   return (
@@ -130,12 +134,12 @@ export default function Moon() {
             shadow-bias={-0.0001}
           />
           <Suspense fallback={null}>
-            {/* <Rig> */}
-            <Model />
-            <Zoom />
-            {/* </Rig> */}
+            <Rig>
+              <Model />
+              {/* <Zoom /> */}
+            </Rig>
           </Suspense>
-          <OrbitControls
+          {/* <OrbitControls
             autoRotate
             enablePan={true}
             enableZoom={true}
@@ -144,7 +148,7 @@ export default function Moon() {
             rotateSpeed={1}
             maxPolarAngle={Math.PI / 2.3}
             minPolarAngle={Math.PI / 2.3}
-          />
+          /> */}
         </Canvas>
         <Loading />
       </div>
