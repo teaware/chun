@@ -1,8 +1,8 @@
 import Head from "next/head";
 import * as THREE from "three";
 import React, { Suspense, useState, useEffect, useRef } from "react";
-import { Canvas, useThree } from "react-three-fiber";
-import { useGLTF, OrbitControls } from "@react-three/drei";
+import { Canvas, useThree, useFrame } from "react-three-fiber";
+import { useGLTF, OrbitControls, Reflector } from "@react-three/drei";
 import { useTransition, a } from "react-spring";
 
 // npx gltfjsx public/scene.gltf
@@ -13,17 +13,27 @@ function Model(props) {
   const { nodes, materials } = useGLTF(url);
   const { gl } = useThree();
   useEffect(() => void gl.setPixelRatio(window.devicePixelRatio || 2), []);
+  useFrame(() => {
+    group.current.children[0].position.x = THREE.MathUtils.lerp(
+      group.current.children[0].position.x,
+      10,
+      0.03
+    );
+  });
 
   return (
     <group ref={group} {...props} dispose={null}>
-      <group rotation={[-Math.PI / 2, 0, 0]}>
-        <group rotation={[Math.PI / 2, 0, 0]}>
-          <group rotation={[-Math.PI / 2, 0, 0]} scale={[6, 6, 6]}>
-            <mesh
-              geometry={nodes.Sphere_Material002_0.geometry}
-              material={materials["Material.002"]}
-            />
-          </group>
+      <sphereGeometry args={[2, 64, 64]} />
+      <group>
+        <group
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[-10, 1, 5]}
+          scale={[6, 6, 6]}
+        >
+          <mesh
+            geometry={nodes.Sphere_Material002_0.geometry}
+            material={materials["Material.002"]}
+          />
         </group>
       </group>
     </group>
@@ -67,6 +77,32 @@ function Loading() {
   );
 }
 
+function Zoom() {
+  const vec = new THREE.Vector3(0, 0, 100);
+  return useFrame((state) => {
+    state.camera.position.lerp(vec, 0.075);
+    state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 20, 0.075);
+    state.camera.lookAt(0, 0, 0);
+    state.camera.updateProjectionMatrix();
+  });
+}
+
+// function Rig({ children }) {
+//   const outer = useRef<THREE.Group>(null!);
+//   const inner = useRef<THREE.Group>(null!);
+//   useFrame(({ camera, clock }) => {
+//     outer.current.position.y = THREE.MathUtils.lerp(outer.current.position.y, 0, 0.05)
+//     inner.current.rotation.y = Math.sin(clock.getElapsedTime() / 8) * Math.PI
+//     inner.current.position.z = 5 + -Math.sin(clock.getElapsedTime() / 2) * 10
+//     inner.current.position.y = -5 + Math.sin(clock.getElapsedTime() / 2) * 2
+//   })
+//   return (
+//     <group position={[0, -100, 0]} ref={outer}>
+//       <group ref={inner}>{children}</group>
+//     </group>
+//   )
+// }
+
 export default function Moon() {
   return (
     <>
@@ -75,7 +111,6 @@ export default function Moon() {
       </Head>
 
       <h1 className="absolute top-32 left-1/2 transform -translate-x-1/2 tracking-tighter leading-none text-center text-5xl lg:text-9xl">
-        月
         <span className="block font-serif font-thin text-3xl lg:text-8xl">
           中秋愉快
         </span>
@@ -83,7 +118,7 @@ export default function Moon() {
       <div className="w-full h-screen">
         <Canvas shadowMap camera={{ position: [0, 0, 25] }}>
           <ambientLight intensity={0.75} />
-          {/* <pointLight intensity={1} position={[-10, -25, -10]} /> */}
+          <pointLight intensity={1} position={[-10, -25, -10]} />
           <spotLight
             castShadow
             intensity={2.25}
@@ -95,7 +130,10 @@ export default function Moon() {
             shadow-bias={-0.0001}
           />
           <Suspense fallback={null}>
+            {/* <Rig> */}
             <Model />
+            <Zoom />
+            {/* </Rig> */}
           </Suspense>
           <OrbitControls
             autoRotate
@@ -104,8 +142,8 @@ export default function Moon() {
             enableDamping
             dampingFactor={0.5}
             rotateSpeed={1}
-            maxPolarAngle={Math.PI / 4}
-            minPolarAngle={Math.PI / 4}
+            maxPolarAngle={Math.PI / 2.3}
+            minPolarAngle={Math.PI / 2.3}
           />
         </Canvas>
         <Loading />
