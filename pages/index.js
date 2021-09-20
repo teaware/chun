@@ -14,22 +14,23 @@ function Model(props) {
   const { gl } = useThree();
   useEffect(() => void gl.setPixelRatio(window.devicePixelRatio || 2), []);
   useFrame(() => {
-    group.current.children[0].position.x = THREE.MathUtils.lerp(
-      group.current.children[0].position.x,
-      10,
+    group.current.position.x = THREE.MathUtils.lerp(
+      group.current.position.x,
+      0,
+      0.03
+    );
+    group.current.position.y = THREE.MathUtils.lerp(
+      group.current.position.y,
+      5,
       0.03
     );
   });
 
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={group} {...props} position={[-21, -95, 0]} dispose={null}>
       <sphereGeometry args={[2, 64, 64]} />
       <group>
-        <group
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={[-10, 5, 5]}
-          scale={[6, 6, 6]}
-        >
+        <group rotation={[-Math.PI / 2, 0, 0]} scale={[6, 6, 6]}>
           <mesh
             geometry={nodes.Sphere_Material002_0.geometry}
             material={materials["Material.002"]}
@@ -62,7 +63,7 @@ function Loading() {
     ({ item: finished, key, props: { opacity, width } }) =>
       !finished && (
         <a.div
-          className="w-full h-screen fixed top-0 left-0 flex justify-center items-center bg-white dark:bg-gray-900"
+          className="w-full h-screen fixed top-0 left-0 flex justify-center items-center bg-gray-900"
           key={key}
           style={{ opacity }}
         >
@@ -114,7 +115,7 @@ export default function Moon() {
         <title>Moon</title>
       </Head>
 
-      <h1 className="absolute top-40 left-1/2 transform -translate-x-1/2 tracking-tighter leading-none text-center text-5xl lg:text-9xl">
+      <h1 className="absolute top-40 left-1/2 transform -translate-x-1/2 tracking-tighter leading-none text-center text-5xl lg:text-9xl text-white">
         <span className="block font-serif font-thin text-3xl lg:text-8xl">
           中秋快乐
         </span>
