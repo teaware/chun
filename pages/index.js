@@ -14,23 +14,22 @@ function Model(props) {
   const { gl } = useThree();
   useEffect(() => void gl.setPixelRatio(window.devicePixelRatio || 2), []);
   useFrame(() => {
-    group.current.position.x = THREE.MathUtils.lerp(
-      group.current.position.x,
-      0,
-      0.03
-    );
-    group.current.position.y = THREE.MathUtils.lerp(
-      group.current.position.y,
-      5,
+    group.current.children[0].position.x = THREE.MathUtils.lerp(
+      group.current.children[0].position.x,
+      10,
       0.03
     );
   });
 
   return (
-    <group ref={group} {...props} position={[-21, -95, 0]} dispose={null}>
+    <group ref={group} {...props} dispose={null}>
       <sphereGeometry args={[2, 64, 64]} />
       <group>
-        <group rotation={[-Math.PI / 2, 0, 0]} scale={[6, 6, 6]}>
+        <group
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[-10, 5, 5]}
+          scale={[6, 6, 6]}
+        >
           <mesh
             geometry={nodes.Sphere_Material002_0.geometry}
             material={materials["Material.002"]}
@@ -67,11 +66,8 @@ function Loading() {
           key={key}
           style={{ opacity }}
         >
-          <div className="w-40 lg:w-80 h-1 bg-gray-400 rounded-sm">
-            <a.div
-              className="h-1 bg-black dark:bg-white rounded-sm"
-              style={{ width }}
-            />
+          <div className="w-40 lg:w-80 h-1 bg-gray-500 rounded-sm">
+            <a.div className="h-1 bg-white rounded-sm" style={{ width }} />
           </div>
         </a.div>
       )
@@ -115,7 +111,7 @@ export default function Moon() {
         <title>Moon</title>
       </Head>
 
-      <h1 className="absolute top-40 left-1/2 transform -translate-x-1/2 tracking-tighter leading-none text-center text-5xl lg:text-9xl text-white">
+      <h1 className="absolute top-40 left-1/2 transform -translate-x-1/2 tracking-tighter leading-none text-center text-5xl lg:text-9xl">
         <span className="block font-serif font-thin text-3xl lg:text-8xl">
           中秋快乐
         </span>

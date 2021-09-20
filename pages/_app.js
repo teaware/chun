@@ -36,7 +36,8 @@ const Layout = ({ children }) => {
         <meta name="theme-color" content="#ffffff" />
       </Head>
 
-      <main className="h-full min-h-screen antialiased text-gray-800 bg-blue-200 dark:text-white dark:bg-gray-600">
+      {/* <main className="h-full min-h-screen antialiased text-gray-800 bg-blue-200 dark:text-white dark:bg-gray-600"> */}
+      <main className="h-full min-h-screen antialiased text-white bg-gray-900">
         {children}
       </main>
       {/* <DarkMode /> */}
