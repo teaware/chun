@@ -62,7 +62,7 @@ function Loading() {
     ({ item: finished, key, props: { opacity, width } }) =>
       !finished && (
         <a.div
-          className="w-full h-screen fixed top-0 left-0 flex justify-center items-center bg-gray-900"
+          className="w-full h-full fixed top-0 left-0 flex justify-center items-center bg-gray-900"
           key={key}
           style={{ opacity }}
         >
@@ -116,7 +116,7 @@ export default function Moon() {
           中秋快乐
         </span>
       </h1>
-      <div className="w-full h-screen text-white bg-black">
+      <div className="w-full h-full fixed top-0 left-0 text-white bg-black">
         <Canvas shadowMap camera={{ position: [0, 0, 25] }}>
           <ambientLight intensity={0.75} />
           <pointLight intensity={1} position={[-10, -25, -10]} />
