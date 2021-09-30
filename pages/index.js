@@ -113,7 +113,7 @@ export default function Moon() {
 
       <h1 className="absolute top-40 left-1/2 transform -translate-x-1/2 tracking-tighter leading-none text-center text-5xl lg:text-9xl">
         <span className="block font-serif font-thin text-3xl lg:text-8xl">
-          中秋快乐
+          Moon
         </span>
       </h1>
       <div className="w-full h-screen">
